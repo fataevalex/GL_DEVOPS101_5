@@ -7,7 +7,7 @@
 bash
 chmod +x scripts/kubeplugin
 rm ~/.krew/bin/kubectl-kubeplugin
-ln -s "$(pwd)/scripts/kubectl-kubeplugin" ~/.krew/bin/kubectl-kubeplugin
+ln -s "$(pwd)/scripts/kubeplugin" ~/.krew/bin/kubectl-kubeplugin
 ```
 ### Використання
 ```
