@@ -1,0 +1,37 @@
+#!/bin/bash
+#set -x
+# Define command-line arguments
+
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    -n|--namespace) NAMESPACE="$2"; shift ;;
+    -h|--help) usage ;;
+    *) RESOURCE_TYPE="$1" ;;
+  esac
+  shift
+done
+
+
+if [[ -z "$RESOURCE_TYPE" ]]; then
+    echo "Usage: kubectl kubeplugin -n <namespace> [resource_type]"
+    echo "Example: kubectl kubeplugin -n kube-system pod"
+    exit 1
+fi
+
+if [[ -z "$NAMESPACE" ]]; then
+  NAMESPACE="kube-system"
+fi
+
+echo "Resource, Namespace, Name, CPU, Memory"
+# Retrieve resource usage statistics from Kubernetes
+kubectl top $RESOURCE_TYPE -n $NAMESPACE | tail -n +2 | while read line
+do
+  # Extract CPU and memory usage from the output
+  NAME=$(echo $line | awk '{print $1}')
+  CPU=$(echo $line | awk '{print $2}')
+  MEMORY=$(echo $line | awk '{print $3}')
+
+  # Output the statistics to the console
+  # "Resource, Namespace, Name, CPU, Memory"
+  echo "$RESOURCE_TYPE, $NAMESPACE, $NAME, $CPU, $MEMORY"
+done
