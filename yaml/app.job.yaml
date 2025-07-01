@@ -3,13 +3,13 @@ kind: Job
 metadata:
   name: db-init-job
 spec:
-  template:
+  template: # This is the Pod template for the Job
     spec:
       containers:
-      - name: db-init-container
-        image: busybox:1.28 # Replace with your DB client image, e.g., postgres:13
-        command: ["/bin/sh", "-c"]
-        args:
-        - echo "Initializing database..."; sleep 20; echo "Database initialized successfully!"; # Replace with your actual DB init commands
-      restartPolicy: OnFailure
-  backoffLimit: 4
+        - name: db-init-container
+          image: busybox:1.28 # Replace with your DB client image, e.g., postgres:13
+          command: ["/bin/sh", "-c"]
+          args:
+            - "echo \"Initializing database...\"; sleep 20; echo \"Database initialized successfully!\";" # Make sure the entire command string is quoted
+      restartPolicy: OnFailure # Correctly placed within spec.template.spec
+  backoffLimit: 4 # Correctly placed directly under spec for the Job
