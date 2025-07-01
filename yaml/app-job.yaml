@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app-job-rsync
+spec:
+  template:
+    spec:
+      containers:
+      - name: init
+        image: google/cloud-sdk:275.0.0-alpine
+        command:
+        - "gsutil"
+        - "rsync"
+        - "gs://glow-sportradar/"
+        - "/data/input"
+        volumeMounts:
+        - name: data-disk
+          mountPath: /data/input
+      volumes:
+      - name: data-disk
+        gcePersistentDisk:
+          pdName: glow-data-disk-200
+          fsType: ext4
+      restartPolicy: Never
+  backoffLimit: 0

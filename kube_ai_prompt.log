@@ -1177,3 +1177,135 @@ EOF
   Is there anything else I can help you with?
 
 
+  Hey there, what can I help you with today?
+
+
+>>> generate a Job app-job-rsync with a container named init. Image is google/cloud-sdk:275.0.0-alpine. Command is "gsutil rsync gs://glow-sportradar/ /data/input". Mount a GCE Persistent Disk named glow-data-disk-200 (ext4) to /data/input. restartPolicy Never, backoffLimit 0.
+
+  Of course! I can create that Job for you. Here is the command to generate the
+  Job as you requested:
+
+
+  Running: cat <<EOF | kubectl apply -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app-job-rsync
+spec:
+  template:
+    spec:
+      containers:
+      - name: init
+        image: google/cloud-sdk:275.0.0-alpine
+        command:
+        - "gsutil"
+        - "rsync"
+        - "gs://glow-sportradar/"
+        - "/data/input"
+        volumeMounts:
+        - name: data-disk
+          mountPath: /data/input
+      volumes:
+      - name: data-disk
+        gcePersistentDisk:
+          pdName: glow-data-disk-200
+          fsType: ext4
+      restartPolicy: Never
+  backoffLimit: 0
+EOF
+
+
+  Do you want to proceed ?
+  1) Yes
+  2) Yes, and don't ask me again
+  3) No
+  Enter your choice (number): 3
+
+  Operation was skipped.
+
+
+
+  Understood. My apologies, I shouldn't have assumed I could apply the resource
+  directly.
+
+  Here is the YAML definition for the Job. You can save this to a file (e.g.,
+  job.yaml ) and then apply it to your cluster using  kubectl apply -f job.yaml .
+
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: app-job-rsync
+    spec:
+      template:
+        spec:
+          containers:
+          - name: init
+            image: google/cloud-sdk:275.0.0-alpine
+            command:
+            - "gsutil"
+            - "rsync"
+            - "gs://glow-sportradar/"
+            - "/data/input"
+            volumeMounts:
+            - name: data-disk
+              mountPath: /data/input
+          volumes:
+          - name: data-disk
+            gcePersistentDisk:
+              pdName: glow-data-disk-200
+              fsType: ext4
+          restartPolicy: Never
+      backoffLimit: 0
+
+  Let me know if you need any other modifications! 😊
+
+
+>>> save to file yaml/app-job.yaml
+
+  Of course. I will save the Job definition to  yaml/app-job.yaml .
+
+
+  Running: mkdir -p yaml && cat <<EOF > yaml/app-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app-job-rsync
+spec:
+  template:
+    spec:
+      containers:
+      - name: init
+        image: google/cloud-sdk:275.0.0-alpine
+        command:
+        - "gsutil"
+        - "rsync"
+        - "gs://glow-sportradar/"
+        - "/data/input"
+        volumeMounts:
+        - name: data-disk
+          mountPath: /data/input
+      volumes:
+      - name: data-disk
+        gcePersistentDisk:
+          pdName: glow-data-disk-200
+          fsType: ext4
+      restartPolicy: Never
+  backoffLimit: 0
+EOF
+
+
+  Do you want to proceed ?
+  1) Yes
+  2) Yes, and don't ask me again
+  3) No
+  Enter your choice (number): 1
+
+  I have saved the Job definition to  yaml/app-job.yaml . You can now apply it to
+  your cluster using the following command:
+
+    kubectl apply -f yaml/app-job.yaml
+
+  Let me know if you need anything else! 😊
+
+
+
