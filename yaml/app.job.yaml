@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-init-container
+        image: busybox:1.28 # Replace with your DB client image, e.g., postgres:13
+        command: ["/bin/sh", "-c"]
+        args:
+        - echo "Initializing database..."; sleep 20; echo "Database initialized successfully!"; # Replace with your actual DB init commands
+      restartPolicy: OnFailure
+  backoffLimit: 4

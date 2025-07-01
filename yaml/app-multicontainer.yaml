@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: main-app
+        image: nginx
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/nginx
+      - name: sidecar
+        image: busybox
+        command: ["/bin/sh", "-c", "tail -n+1 -f /var/log/nginx/access.log /var/log/nginx/error.log"]
+        volumeMounts:
+        - name: shared-logs
+          mountPath: /var/log/nginx
+      volumes:
+      - name: shared-logs
+        emptyDir: {}

@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: daily-cleanup-job
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: cleanup-container
+            image: busybox:1.28
+            command: ["/bin/sh", "-c"]
+            args:
+            - echo "Running daily cleanup script...";
+          restartPolicy: OnFailure
