@@ -1,0 +1,20 @@
+# k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptime-v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: uptime
+  template:
+    metadata:
+      labels:
+        app: uptime
+    spec:
+      containers:
+        - name: uptime
+          image: ghcr.io/fataevalex/gl_devops101_5/uptime-check:v1.0.0
+          ports:
+            - containerPort: 80

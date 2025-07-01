@@ -1,0 +1,22 @@
+# k8s/canary.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptime-v2-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uptime
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: uptime
+        version: canary
+    spec:
+      containers:
+        - name: uptime
+          image: ghcr.io/fataevalex/gl_devops101_5/uptime-check:v2.0.0
+          ports:
+            - containerPort: 80

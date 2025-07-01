@@ -1,0 +1,2 @@
+FROM nginx:alpine
+RUN echo "Version: 2.0.0" > /usr/share/nginx/html/index.html
