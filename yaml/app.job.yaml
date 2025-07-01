@@ -1,15 +1,24 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: db-init-job
+  name: app-job-rsync
 spec:
-  template: # This is the Pod template for the Job
+  template:
     spec:
+      volumes:
+        - name: data-input
+          gcePersistentDisk:
+            pdName: glow-data-disk-200
+            fsType: ext4
       containers:
-        - name: db-init-container
-          image: busybox:1.28 # Replace with your DB client image, e.g., postgres:13
-          command: ["/bin/sh", "-c"]
-          args:
-            - "echo \"Initializing database...\"; sleep 20; echo \"Database initialized successfully!\";" # Make sure the entire command string is quoted
-      restartPolicy: OnFailure # Correctly placed within spec.template.spec
-  backoffLimit: 4 # Correctly placed directly under spec for the Job
+        - name: init
+          image: google/cloud-sdk:275.0.0-alpine
+          command:
+            - /bin/sh
+            - -c
+            - gsutil -m rsync -dr gs://glow-sportradar/ /data/input
+          volumeMounts:
+            - name: data-input
+              mountPath: /data/input
+      restartPolicy: Never
+  backoffLimit: 0
